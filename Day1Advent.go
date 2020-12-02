@@ -104,7 +104,7 @@ func solvePuzzle2(numbers []int) (matchOne int, matchTwo int, matchThree int, pr
 
 func main() {
 
-	numbers, err := readNumbersFromFile("inputs_01_12.txt")
+	numbers, err := readNumbersFromFile("data/inputs_01_12.txt")
 	check(err)
 
 	//printNumbers(numbers)
