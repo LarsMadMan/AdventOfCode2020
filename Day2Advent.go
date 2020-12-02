@@ -52,7 +52,13 @@ func abidesByPolicyPuzzle2(password string, pos1 int, pos2 int, charToMatch stri
 	pos1Char := string(runes[adjustedPos1:pos1]) //we're taking one char, and orig pos is adjusted plus 1
 	pos2Char := string(runes[adjustedPos2:pos2])
 
-	if pos1Char == charToMatch && pos2Char == charToMatch {
+	if pos1Char == charToMatch && pos2Char != charToMatch {
+
+		log.Println(trimmedPwd, "char at pos1(", pos1, ") is", pos1Char, "char at pos2 (", pos2, ") is", pos2Char, "char to match", charToMatch)
+
+		return true
+	}
+	if pos1Char != charToMatch && pos2Char == charToMatch {
 
 		log.Println(trimmedPwd, "char at pos1(", pos1, ") is", pos1Char, "char at pos2 (", pos2, ") is", pos2Char, "char to match", charToMatch)
 
