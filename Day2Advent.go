@@ -82,6 +82,8 @@ func solvePuzzle1(passwords []string) (numValidPasswords int) {
 
 func solvePuzzle2(passwords []string) (numValidPasswords int) {
 
+	numValidPasswords = 0
+
 	for _, line := range passwords {
 
 		pos1, pos2, charToMatch, password := splitStringIntoJuicyBits(line)
