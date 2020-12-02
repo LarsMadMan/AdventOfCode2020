@@ -2,18 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"sort"
-	"strconv"
-	"strings"
+	adventutilities "AdventOfCode/utils"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+
 
 func printNumbers(nums []int) {
 
@@ -22,31 +16,7 @@ func printNumbers(nums []int) {
 	}
 }
 
-func readNumbersFromFile(fileName string) (nums []int, err error) {
 
-	data, err := ioutil.ReadFile(fileName)
-	check(err)
-
-	lines := strings.Split(string(data), "\n")
-
-	// Assign cap to avoid resize on every append.
-	nums = make([]int, 0, len(lines))
-
-	var val int = 0
-
-	for _, s := range lines {
-
-		val, err = strconv.Atoi(s)
-		if err != nil {
-			return nil, err
-		}
-
-		nums = append(nums, val)
-
-	}
-
-	return nums, nil
-}
 
 func solvePuzzle1(numbers []int) (matchOne int, matchTwo int, product int) {
 
@@ -104,8 +74,8 @@ func solvePuzzle2(numbers []int) (matchOne int, matchTwo int, matchThree int, pr
 
 func main() {
 
-	numbers, err := readNumbersFromFile("data/inputs_01_12.txt")
-	check(err)
+	numbers, err := adventutilities.ReadNumbersFromFile("data/inputs_01_12.txt")
+	adventutilities.Check(err)
 
 	//printNumbers(numbers)
 
