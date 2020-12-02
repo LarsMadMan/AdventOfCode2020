@@ -1,91 +1,75 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"sort"
+	"strings"
+	"strconv"
 	adventutilities "AdventOfCode/utils"
 )
 
+func splitStringIntoJuicyBits(passwAndPolicy string)(minOcc int, maxOcc int, charToMatch string, password string){
+
+	// trekk ut policy
+	policy := strings.Split(passwAndPolicy," ")[0]
+	minOcc,err := strconv.Atoi(strings.Split(policy, "-")[0])
+	adventutilities.Check(err)
+
+	maxOcc,err = strconv.Atoi(strings.Split(policy, "-")[1])
+		adventutilities.Check(err)
+
+	//find :
+	i := strings.Index(passwAndPolicy, ":")
+	charToMatch = passwAndPolicy[i-1:i]
+	password = passwAndPolicy[i:]
 
 
-func printNumbers(nums []int) {
+	log.Println("line: ",passwAndPolicy, "passwd: ", password," policy:", policy," minOcc: ", minOcc, " maxOcc: ", maxOcc, "char to match is", charToMatch)
 
-	for i, s := range nums {
-		fmt.Println(i, s)
-	}
+	return minOcc, maxOcc, charToMatch, password
 }
 
+func abidesByPolicy(password string, minOcc int, maxOcc int, charToMatch string)(ok bool){
 
+	count := strings.Count(password, charToMatch)
+		
+	log.Println(password, count)
 
-func solvePuzzle1(numbers []int) (matchOne int, matchTwo int, product int) {
+	return count >= minOcc && count <= maxOcc
+}
 
-	if !(sort.IntsAreSorted(numbers)) {
-		sort.Ints(numbers)
-	}
+func solvePuzzle1(passwords []string) (numValidPasswords int) {
 
-	for i, s := range numbers {
+	numValidPasswords = 0
 
-		match2020 := 2020 - s
+	for _, line := range passwords{
 
-		log.Println("the integer at position ", i, "is ", s, " and the match we need is ", match2020)
+		
+		
+		minOcc, maxOcc, charToMatch, password := splitStringIntoJuicyBits(line)
+		
+		
 
-		foundIndex := sort.SearchInts(numbers, match2020)
-
-		if foundIndex > 0 && numbers[foundIndex] == match2020 {
-			log.Println("We have found something! indexed at ", foundIndex)
-
-			return s, match2020, s * match2020
+		if abidesByPolicy(password,minOcc,maxOcc,charToMatch){
+			log.Println("valid password:", password)
+			numValidPasswords++
 		}
-
+		
 	}
 
-	return 0, 1, 2
+	return numValidPasswords
 }
 
-func solvePuzzle2(numbers []int) (matchOne int, matchTwo int, matchThree int, product int) {
 
-	if !(sort.IntsAreSorted(numbers)) {
-		sort.Ints(numbers)
-	}
-
-	for i, matchAttempt1 := range numbers {
-
-		for j, matchAttempt2 := range numbers {
-
-			log.Println("the integer at position ", i, "is ", matchAttempt1, "and j ", j, " is ", matchAttempt2)
-
-			match2020 := 2020 - (matchAttempt1 + matchAttempt2)
-
-			log.Println("We are looking for ", match2020)
-			foundIndex := sort.SearchInts(numbers, match2020)
-
-			if foundIndex > 0 && numbers[foundIndex] == match2020 {
-				log.Println("We have found something! indexed at ", foundIndex)
-
-				return matchAttempt1, matchAttempt2, match2020, matchAttempt1 * match2020 * matchAttempt2
-			}
-		}
-
-	}
-
-	return 0, 0, 1, 2
-}
 
 func main() {
-
 	
 	lines, err := adventutilities.ReadStringsFromFile("data/inputs_02_12.txt")
 	adventutilities.Check(err)
 
-	log.Println(lines)
+	
 
-	//m1, m2, product := solvePuzzle1(numbers)
-
-	//log.Println("Solved the puzzle! m1: ", m1, " m2: ", m2, "product: ", product)
-
-	//m1, m2, m3, product := solvePuzzle2(numbers)
-
-	//log.Println("Solved the puzzle! m1: ", m1, " m2: ", m2, " m3: ", m3, "product: ", product)
-
+	numValid := solvePuzzle1(lines)
+	log.Println("got a file with ", len(lines), " passwords to check")
+	log.Println("numValid passwords:", numValid)
+	
 }

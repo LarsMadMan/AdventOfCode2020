@@ -12,6 +12,8 @@ func Check(e error) {
 	}
 }
 
+
+
 func ReadStringsFromFile(fileName string) (lines []string, err error) {
 	data, err := ioutil.ReadFile(fileName)
 	Check(err)
