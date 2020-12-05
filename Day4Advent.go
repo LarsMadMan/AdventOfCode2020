@@ -69,27 +69,83 @@ func solvePuzzle1(lines []string)(numTrees int){
 
 func splitInputs(lines []string)(records[] string){
 
+	
 	record := ""
 
-	for _, line := range lines {
+
+	for n, line := range lines {
 		
-		if line == "" {
+		if line == ""  {
+			
 			//new record
-			log.Println("new record")
+			strings.TrimSpace(record)
+			records = append(records, record)
+			record = ""
+		}else{
+			record += " " 
+			record += line
 		}
 
+		if(n == len(lines)-1){
+			
+			record += line
+			strings.TrimSpace(record)
+			records = append(records, record)
+		}
+		
+
 	}
-	return strings.Split(record, "\n")
+	return records
 
 }
 
+func isvalid(p passport.Passport)(isvalid bool, reason string){
+	
+
+	if p.BirthYear == 0{
+		reason = "p.BirthYear is missing"
+		return false, reason;
+	}
+
+	if p.IssueYear == 0{
+		reason = "p.IssueYear is missing"
+		return false, reason;
+	}
+
+	if p.ExpirationYear == 0{
+		reason = "p.ExpirationYear is missing"
+		return false, reason;
+	}
+
+	if p.PassportId == ""{
+		reason = "p.PassportId is missing"
+		return false, reason;
+	}
+
+	if p.Height == ""{
+		reason = "p.Height is missing"
+		return false, reason;
+	}
+
+	if p.HairColor == ""{
+		reason = "p.HairColor is missing"
+		return false, reason;
+	}
+	if p.EyeColor == ""{
+		reason = "p.EyeColor is missing"
+		return false, reason;
+	}
+	
+
+	return true, reason
+}
 
 
 
 func main() {
 
 	//need to work out how to write tests in Go, but leaving for another day
-	test := true
+	test := false
 
 	log.Println("test:",test)
 
@@ -102,14 +158,32 @@ func main() {
 	lines, err := adventutilities.ReadStringsFromFile(fileName)
 	adventutilities.Check(err)
 
-	
-	
-	for _, line := range lines {
-		p := passport.MapStringToPassport(line)
+	log.Println("len of lines",len(lines))
 
-		p.Print()
+	records := splitInputs(lines)
+	
+	log.Println(len(records))
+	
+	numValidPassports := 0
+	isValid := false
+	reason := ""
+	for _, record := range records {
+		p := passport.MapStringToPassport(record)
+
+		reason = ""
+		isValid, reason = isvalid(p)
+
+		log.Println("Passport with Birthyear",p.BirthYear, "is valid:",isValid,"reason:",reason)
+
+		if isValid{
+			
+			numValidPassports++
+		}
+		
+
+		
 	}
 
-	
+	log.Println("Number of valid passports:",numValidPassports)
 	
 }
