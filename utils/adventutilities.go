@@ -4,11 +4,23 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"log"
 )
 
 func Check(e error) {
 	if e != nil {
 		panic(e)
+	}
+}
+
+func CheckResult(testName string, actual int, expected int)(success bool){
+
+	if(actual == expected){
+		log.Println("Test:", testName, "successful, actual",actual,"== expected",expected)
+		return true
+	}else{
+		log.Println("Test:", testName, "failed, expected", expected, "got",actual)
+		return false
 	}
 }
 

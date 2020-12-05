@@ -1,7 +1,7 @@
 package main
 
 import (
-	adventutilities "AdventOfCode/utils"
+adventutilities "AdventOfCode/utils"
 	"log"
 	"strconv"
 	"strings"
