@@ -1,75 +1,69 @@
 package passport
 
-import (  
-    "log"
-    "strings"
-    "strconv"
+import (
+	"log"
+	"strconv"
+	"strings"
 )
 
-type Passport struct {  
-    BirthYear   int
-    IssueYear    int
-    ExpirationYear int
-    HairColor string
-    EyeColor string
-    Height string
-    PassportId string
-    CountryId int
+type Passport struct {
+	BirthYear      int    `validate:"required,gte=1920,lte=2002`
+	IssueYear      int    `validate:"required,gte=2010,lte=2020`
+	ExpirationYear int    `validate:"required,gte=2020,lte=2030`
+	HairColor      string `validate:"hexcolor|rgb|rgba"`
+	EyeColor       string `validate:"required"`
+	Height         string `validate:"required"`
+	PassportId     string `validate:"required"`
+	CountryId      int
 }
 
-func (p Passport) Print() {  
-   
-    log.Println("BirthYear:",p.BirthYear)
-    log.Println("IssueYear:",p.IssueYear)
-    log.Println("ExpirationYear:",p.ExpirationYear)
-    log.Println("HairColor:",p.HairColor)
-    log.Println("EyeColor:",p.EyeColor)
-    log.Println("Height:",p.Height)
-    log.Println("PassportId:",p.PassportId)
-    log.Println("CountryId:",p.CountryId)
+func (p Passport) Print() {
+
+	log.Println("BirthYear:", p.BirthYear)
+	log.Println("IssueYear:", p.IssueYear)
+	log.Println("ExpirationYear:", p.ExpirationYear)
+	log.Println("HairColor:", p.HairColor)
+	log.Println("EyeColor:", p.EyeColor)
+	log.Println("Height:", p.Height)
+	log.Println("PassportId:", p.PassportId)
+	log.Println("CountryId:", p.CountryId)
 }
 
+func MapStringToPassport(rawData string) (p Passport) {
 
+	//log.Println("==========MapStringToPassport=======")
 
-func MapStringToPassport(rawData string)(p Passport){
+	p = Passport{}
 
-    //log.Println("==========MapStringToPassport=======")
-    
-    p = Passport{}
-   
+	splitIntoKeyValues := strings.Split(rawData, " ")
 
-    splitIntoKeyValues := strings.Split(rawData, " ")
+	for _, keyValue := range splitIntoKeyValues {
 
-    for _, keyValue := range splitIntoKeyValues {
-        
-        keyValueSplitted := strings.Split(keyValue,":")
+		keyValueSplitted := strings.Split(keyValue, ":")
 
-        switch{
-        case keyValueSplitted[0] == "hcl":
-            p.HairColor = keyValueSplitted[1]
-        case keyValueSplitted[0] == "byr":
-            val, _ := strconv.Atoi(keyValueSplitted[1])
-            p.BirthYear  = val
-        case keyValueSplitted[0] == "iyr":
-            val, _ := strconv.Atoi(keyValueSplitted[1])
-            p.IssueYear = val
-        case keyValueSplitted[0] == "eyr":
-            val, _ := strconv.Atoi(keyValueSplitted[1])
-            p.ExpirationYear = val
-        case keyValueSplitted[0] == "pid":
-            p.PassportId = keyValueSplitted[1]
-        case keyValueSplitted[0] == "cid":
-            val, _ := strconv.Atoi(keyValueSplitted[1])
-            p.CountryId = val
-        case keyValueSplitted[0] == "ecl":
-            p.EyeColor = keyValueSplitted[1]
-        case keyValueSplitted[0] == "hgt":
-            p.Height = keyValueSplitted[1]
-        }
-    }
+		switch {
+		case keyValueSplitted[0] == "hcl":
+			p.HairColor = keyValueSplitted[1]
+		case keyValueSplitted[0] == "byr":
+			val, _ := strconv.Atoi(keyValueSplitted[1])
+			p.BirthYear = val
+		case keyValueSplitted[0] == "iyr":
+			val, _ := strconv.Atoi(keyValueSplitted[1])
+			p.IssueYear = val
+		case keyValueSplitted[0] == "eyr":
+			val, _ := strconv.Atoi(keyValueSplitted[1])
+			p.ExpirationYear = val
+		case keyValueSplitted[0] == "pid":
+			p.PassportId = keyValueSplitted[1]
+		case keyValueSplitted[0] == "cid":
+			val, _ := strconv.Atoi(keyValueSplitted[1])
+			p.CountryId = val
+		case keyValueSplitted[0] == "ecl":
+			p.EyeColor = keyValueSplitted[1]
+		case keyValueSplitted[0] == "hgt":
+			p.Height = keyValueSplitted[1]
+		}
+	}
 
-    
-
-
-    return p
+	return p
 }
